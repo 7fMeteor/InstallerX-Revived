@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
+// Copyright (C) 2025-2026 InstallerX Revived contributors
 package com.rosan.installer.ui.tile
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
@@ -13,11 +15,11 @@ class SettingsTileService : TileService() {
         super.onClick()
 
         val intent = Intent(this, SettingsActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) 
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            // Android 14 (API 34) 及以上：必须使用 PendingIntent
+            // Must use PendingIntent on Android 14 (API 34) or higher
             val pendingIntent = PendingIntent.getActivity(
                 this,
                 0,
@@ -26,8 +28,9 @@ class SettingsTileService : TileService() {
             )
             startActivityAndCollapse(pendingIntent)
         } else {
-            // Android 13 及以下：直接使用 Intent
+            // Use Intent directly on Android 13 or lower
             @Suppress("DEPRECATION")
+            @SuppressLint("StartActivityAndCollapseDeprecated")
             startActivityAndCollapse(intent)
         }
     }
